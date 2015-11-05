@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="css/leaflet.css">
+    <link rel="stylesheet" href="lrm-valhalla/leaflet.routing.valhalla.css">
+
+    <style>
+      #map {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+      }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="js/leaflet.js"></script>
+    <!--<script src="https://mapzen.com/tangram/tangram.min.js"></script>-->
+    <script src="lrm/leaflet-routing-machine.min.js"></script>
+    <script src="lrm-valhalla/lrm-valhalla.min.js"></script>
+    <script>
+        var map = L.map('map');
+		var OpenStreetMap_Mapnik = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 19,
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+		});
+        OpenStreetMap_Mapnik.addTo(map);
+        var route = L.Routing.control({
+            waypoints: [
+                L.latLng(41.8758,-87.6189),
+                L.latLng(33.8128,-117.9259)
+            ],
+            router: L.Routing.valhalla('valhalla-xy4lCOo', 'auto'),
+            formatter: new L.Routing.Valhalla.Formatter(),
+            summaryTemplate:'<div class="start">{name}</div><div class="info {transitmode}">{distance}, {time}</div>' +
+                            '<button id="button">Click me</button>'
+
+        });
+
+        route.addTo(map);
+    </script>
+</body>
+</html>
