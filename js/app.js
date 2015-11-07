@@ -9,7 +9,7 @@ var AddressInput = {
     addHouse: function () {
         $('.houses').append(
             '<div class="input-group">' +
-            '<input type="text" class="address-input form-control" aria-label="..." onkeypress="getAddress(event)">' +
+            '<input type="text" class="address-input form-control" aria-label="..." onkeypress="AddressInput.getAddress(event)">' +
             '<div class="input-group-btn">' +
             '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"' +
             'aria-expanded="false">Choose <span class="caret"></span></button>' +
@@ -21,7 +21,7 @@ var AddressInput = {
         this.settings.addressList.keypress(getAddress(event));
     },
 
-    getAddresses: function (e) {
+    getAddress: function (e) {
         if (e.keyCode == 13) {
             var searchTerm = e.srcElement.value;
             $.ajax({
