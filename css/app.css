@@ -1,0 +1,16 @@
+html, body {
+    height: 100%;
+}
+#map {
+    height: 600px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+.geocode-address {
+    padding: 0 10px;
+}
+.geocode-address:hover {
+    background-color: rgba(166, 219, 237, .5);
+    font-weight: bold;
+}
