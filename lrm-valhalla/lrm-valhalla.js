@@ -467,7 +467,8 @@ if (typeof module !== undefined) module.exports = polyline;
 
 
       alts = [{
-        name: this._trimLocationKey(inputWaypoints[0].latLng) + " , " + this._trimLocationKey(inputWaypoints[1].latLng) ,
+        // name: this._trimLocationKey(inputWaypoints[0].latLng) + " , " + this._trimLocationKey(inputWaypoints[1].latLng) ,
+        name: inputWaypoints[0].name + " , " + inputWaypoints[1].name ,
         unit: response.trip.units,
         transitmode: this._transitmode,
         coordinates: coordinates,
