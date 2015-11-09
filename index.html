@@ -14,35 +14,22 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="houses">
-                    <div class="input-group">
-                      <input type="text" class="address-input form-control" aria-label="..." onkeypress="AddressInput.getAddress(event)" title="address">
-                      <div class="input-group-btn">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                        </ul>
-                      </div><!-- /btn-group -->
-                    </div><!-- /input-group -->
-
-                    <div class="input-group">
-                      <input type="text" class="address-input form-control" aria-label="..." onkeypress="AddressInput.getAddress(event)" title="address">
-                      <div class="input-group-btn">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                        </ul>
-                      </div><!-- /btn-group -->
-                    </div><!-- /input-group -->
-
-                    <div class="input-group">
-                      <input type="text" class="address-input form-control" aria-label="..." onkeypress="AddressInput.getAddress(event)" title="address">
-                      <div class="input-group-btn">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                        </ul>
-                      </div><!-- /btn-group -->
-                    </div><!-- /input-group -->
+                    <div class="form-group">
+                        <form id="addressForm">
+                            <div class="form-group">
+                                <input id="addressInput1" type="text" class="address-input form-control">
+                            </div>
+                            <div class="form-group">
+                                <input id="addressInput2" type="text" class="address-input form-control">
+                            </div>
+                            <div class="form-group">
+                                <input id="addressInput3" type="text" class="address-input form-control">
+                            </div>
+                        </form>
+                    </div>
+                    <button type="button" class="btn btn-default btn-lg" onclick="AddressInput.addHouse()">+</button>
+                    <button type="button" class="btn btn-primary btn-lg" onclick="AddressInput.getRoute()">Route!</button>
                 </div>
-                <button type="button" class="btn btn-default btn-lg" onclick="AddressInput.addHouse()">+</button>
-                <button type="button" class="btn btn-primary btn-lg" onclick="AddressInput.getRoute()">Route!</button>
             </div>
             <div class="col-md-8">
                 <div id="map"></div>
@@ -59,48 +46,14 @@
     <script src="lrm-valhalla/lrm-valhalla.js"></script>
     <script src="js/app.js"></script>
     <script>
-        var addressSource = function (requestString, responseFunc) {
-            console.log(requestString);
-            var queryString = requestString.term.replace(/[^0-9a-zA-Z ]/g, '');
 
-            $.ajax({
-                url: 'https://search.mapzen.com/v1/autocomplete',
-                dataType: 'json',
-                data: {
-                    'text': queryString,
-                    'api_key': 'search-WE7i6v8',
-                    'focus.point.lat': '37.338',
-                    'focus.point.lon': '-121.886',
-                },
-                success: function (data) {
-                    var arr = [];
-                    data.features.forEach(function(feature) {
-                        arr.push({
-                            label: feature.properties.label,
-                            value: feature.properties.label,
-                            coords: feature.geometry.coordinates.reverse()
-                        });
-                    });
-
-                    responseFunc(arr);
-                },
-                error: function (jqXHR, status, error) {
-                    console.log(error);
-                }
-            });
-        }
         $(function(){
-            $('input').autocomplete({
-                minLength: 5,
-                source: addressSource,
-                select: function (event, ui) {
-
-                }
-            });
+            AddressInput.init();
         });
     </script>
     <script>
         var map = L.map('map').setView([37.338, -121.886], 15);
+        var markerGroup = L.featureGroup();
 		var OpenStreetMap_Mapnik = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			maxZoom: 19,
 			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'

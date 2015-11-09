@@ -1,4 +1,5 @@
 var houses = [];
+var markers = [];
 
 var AddressInput = {
 
@@ -6,19 +7,65 @@ var AddressInput = {
         addressList: $('.address-input')
     },
 
+    init: function () {
+        this.settings.addressList.autocomplete({
+            //appendTo: ".dropdown-toggle",
+            minLength: 5,
+            source: this.addressSource,
+            select: this.addressSelect
+        });
+    },
+
     addHouse: function () {
-        $('.houses').append(
-            '<div class="input-group">' +
-            '<input type="text" class="address-input form-control" aria-label="..." onkeypress="AddressInput.getAddress(event)">' +
-            '<div class="input-group-btn">' +
-            '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"' +
-            'aria-expanded="false">Choose <span class="caret"></span></button>' +
-            '<ul class="dropdown-menu">' +
-            '</ul>' +
-            '</div><!-- /btn-group -->' +
-            '</div><!-- /input-group -->'
+        var lineNum = this.settings.addressList.length + 1;
+        var inputLabel = 'addressInput' + lineNum;
+        $('#addressForm').append('<div class="form-group"><input id="' + inputLabel + '" type="text" class="address-input form-control"></div>'
         );
-        this.settings.addressList.keypress(getAddress(event));
+        this.settings.addressList = $('.address-input');
+        this.init();
+    },
+
+    addressSelect: function (event, ui) {
+        var coords = ui.item.coords;
+
+        $(this).attr('data', coords);
+        var marker = L.marker(coords);
+        markerGroup.addLayer(marker);
+        if (map.hasLayer(markerGroup) === false) {
+            console.log('butt');
+            markerGroup.addTo(map);
+        }
+        map.fitBounds(markerGroup.getBounds());
+    },
+
+    addressSource: function (requestString, responseFunc) {
+        var queryString = requestString.term.replace(/[^0-9a-zA-Z ]/g, '');
+
+        $.ajax({
+            url: 'https://search.mapzen.com/v1/autocomplete',
+            dataType: 'json',
+            data: {
+                'text': queryString,
+                'api_key': 'search-WE7i6v8',
+                'focus.point.lat': '37.338',
+                'focus.point.lon': '-121.886',
+            },
+            success: function (data) {
+                var arr = [];
+                data.features.forEach(function(feature) {
+                    arr.push({
+                        label: feature.properties.label,
+                        value: feature.properties.label,
+                        coords: feature.geometry.coordinates.reverse()
+                    });
+                });
+
+                responseFunc(arr);
+            },
+            error: function (jqXHR, status, error) {
+                console.log(error);
+            }
+        });
     },
 
     getAddress: function (e) {
