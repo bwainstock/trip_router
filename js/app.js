@@ -29,7 +29,7 @@ var AddressInput = {
         var coords = ui.item.coords;
 
         $(this).attr('data', coords);
-        var marker = L.marker(coords);
+        var marker = L.marker(coords).bindPopup(ui.item.label);
         markerGroup.addLayer(marker);
         if (map.hasLayer(markerGroup) === false) {
             console.log('butt');
@@ -109,7 +109,17 @@ var AddressInput = {
     },
 
     getRoute: function () {
-        var locations = [];
+        var addresses = this.settings.addressList;
+        var addressJson = [];
+        addresses.each(function (index, value){
+            addressJson.push(
+                {
+                    'address': $(value).val(),
+                    'latLng': $(value).attr('data')
+                }
+            );
+        });
+        console.log(addressJson);
         for (var house in houses) {
             var newHouse = {'address': house,
                             'lat': houses[house].lat,
