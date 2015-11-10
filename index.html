@@ -28,7 +28,8 @@
                         </form>
                     </div>
                     <button type="button" class="btn btn-default btn-lg" onclick="AddressInput.addHouse()">+</button>
-                    <button type="button" class="btn btn-primary btn-lg" onclick="AddressInput.getRoute()">Route!</button>
+                    <!--<button type="button" class="btn btn-primary btn-lg" onclick="AddressInput.getRoute()">Route!</button>-->
+                    <button type="button" class="btn btn-primary btn-lg" onclick="AddressInput.getRouteOrder()">Route!</button>
                 </div>
             </div>
             <div class="col-md-8">
@@ -47,9 +48,7 @@
     <script src="js/app.js"></script>
     <script>
 
-        $(function(){
-            AddressInput.init();
-        });
+
     </script>
     <script>
         var map = L.map('map').setView([37.338, -121.886], 15);
@@ -71,6 +70,10 @@
         });
 
         route.addTo(map);
+
+        $(function(){
+            AddressInput.init();
+        });
     </script>
 </body>
 </html>
